@@ -3,7 +3,13 @@
 ## Genome dataset:
 
 https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/
-Specifically: GRCh38_latest_genomic.fna.gz (genome) and GRCh38_latest_genomic.gff.gz (annotation)
+Specifically:
+* Genes:
+    1. GRCh38_latest_genomic.fna.gz (genome)
+    2. GRCh38_latest_genomic.gff.gz (annotation)
+
+* TFs:
+    1. GRCh38_latest_rna.gbff.gz (exons)
 
 ## Perturbseq dataset:
 
