@@ -80,7 +80,15 @@ class PairPerturbSeqDataset(Dataset):
         tf_seq = self.tf_seqs[tf_name]
         gene_seq = self.gene_seqs[global_gene_name]
 
-        x = [tf_seq, gene_seq]
+        # x = [tf_seq, gene_seq]
+
+        x = {
+            "tf_name": tf_name,
+            "tf_seq": tf_seq,
+            "gene_name": global_gene_name,
+            "gene_seq": gene_seq
+        }
+
 
         # convert y to tensor
         y_tensor = torch.tensor(y, dtype=torch.float32)
@@ -96,6 +104,11 @@ def perturbseq_collate(batch):
     labels = torch.stack([l if isinstance(l, torch.Tensor) else torch.tensor(l, dtype=torch.float32) for l in labels])
 
     return list(inputs), labels
+
+def perturbseq_collate_2(batch):
+    xs, ys = zip(*batch)
+    return xs, torch.stack(ys)
+
 
 
 def get_dataloader(
@@ -120,7 +133,7 @@ def get_dataloader(
         ds,
         batch_size=batch_size,
         shuffle=shuffle,
-        collate_fn=perturbseq_collate,
+        collate_fn=perturbseq_collate_2,
         drop_last=False,
     )
 
