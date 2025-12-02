@@ -39,8 +39,8 @@ class NucleotideTransformer():
         return mean_tf_embeddings
 
 def precompute_embeddings():
-    parquet_path = "perturbseq_dataset_50.parquet"
-    out_dir = "precomputed"
+    parquet_path = "data/perturbseq_dataset_50.parquet"
+    out_dir = "embeds"
     os.makedirs(out_dir, exist_ok=True)
 
     df = pd.read_parquet(parquet_path)

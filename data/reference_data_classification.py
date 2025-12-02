@@ -24,9 +24,9 @@ class PairPerturbSeqDataset(Dataset):
 
     def __init__(
         self,
-        parquet_path: str = "tf_gene_expression_labeled.parquet",
-        tf_sequences_path: str = "tf_sequences.pkl",
-        gene_sequences_path: str = "gene_sequences_4000bp.pkl",
+        parquet_path: str = "data/tf_gene_expression_labeled.parquet",
+        tf_sequences_path: str = "data/tf_sequences.pkl",
+        gene_sequences_path: str = "data/gene_sequences_4000bp.pkl",
         type: str = "train",
         shuffle: bool = True,
         train_fraction: float = 0.8,
@@ -153,9 +153,9 @@ def get_dataloader(
     """Utility that returns a DataLoader for the whole parquet file.
     """
     ds = PairPerturbSeqDataset(
-        parquet_path=parquet_path,
-        tf_sequences_path=tf_sequences_path,
-        gene_sequences_path=gene_sequences_path,
+    parquet_path=parquet_path,
+    tf_sequences_path=tf_sequences_path,
+    gene_sequences_path=gene_sequences_path,
         type=type,
         train_fraction=train_fraction,
         majority_fraction=majority_fraction,

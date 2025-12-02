@@ -1,8 +1,8 @@
 import numpy as np
 import torch
 from tqdm import tqdm
-from reference_data import get_embedding_dataloader
-from embeddings import NucleotideTransformer
+from data.reference_data import get_embedding_dataloader
+from scratch.embeddings import NucleotideTransformer
 from torch.nn import Linear, ReLU, Sequential
 
 class FCNNModel(torch.nn.Module):
@@ -121,8 +121,8 @@ def test(model, dataloader, criterion, device, final=False, train_dataloader=Non
 
 if __name__ == "__main__":
     model = FCNNModel(embedding_dim=1280, hidden_dim=512)
-    train_dataloader = get_embedding_dataloader(parquet_path="perturbseq_dataset_50.parquet", type="train", batch_size=1024)
-    test_dataloader = get_embedding_dataloader(parquet_path="perturbseq_dataset_50.parquet", type="test", batch_size=1024)
+    train_dataloader = get_embedding_dataloader(parquet_path="data/perturbseq_dataset_50.parquet", type="train", batch_size=1024)
+    test_dataloader = get_embedding_dataloader(parquet_path="data/perturbseq_dataset_50.parquet", type="test", batch_size=1024)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
