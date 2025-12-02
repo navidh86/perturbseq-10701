@@ -15,7 +15,7 @@ class PairPerturbSeqDataset(Dataset):
         parquet_path: path to the parquet file (e.g. 'perturbseq_dataset.parquet')
         tf_sequences_path: path to dict of tf sequences
         gene_sequences_path: path to dict of gene sequences
-        type: 'train' or 'test' split
+        type: 'train' or 'val' or 'test' split
         shuffle: whether to shuffle before split
         train_fraction: fraction of data to use for training (rest for test)
         majority_fraction: fraction of majority class to keep
@@ -29,7 +29,7 @@ class PairPerturbSeqDataset(Dataset):
         gene_sequences_path: str = "gene_sequences_4000bp.pkl",
         type: str = "train",
         shuffle: bool = True,
-        train_fraction: float = 0.8,
+        split_fractions: Tuple[float, float, float] = (0.70, 0.15, 0.15),
         majority_fraction: float = 0.01,
         seed: int = 10701,
     ):
@@ -40,7 +40,7 @@ class PairPerturbSeqDataset(Dataset):
         self.tf_sequences_path = tf_sequences_path
         self.gene_sequences_path = gene_sequences_path
         self.type = type
-        self.train_fraction = train_fraction
+        self.split_fractions = split_fractions
         self.majority_fraction = majority_fraction
         self.seed = seed
     
@@ -82,14 +82,21 @@ class PairPerturbSeqDataset(Dataset):
             label_df = df[df['expression_label'] == label]
             if self.type == "train":
                 if idx == 0:
-                    temp_df = label_df.iloc[:int(self.train_fraction * len(label_df))]
+                    temp_df = label_df.iloc[:int(self.split_fractions[0] * len(label_df))]
                 else:
-                    temp_df = pd.concat([temp_df, label_df.iloc[:int(self.train_fraction * len(label_df))]], ignore_index=True)
-            else:
+                    temp_df = pd.concat([temp_df, label_df.iloc[:int(self.split_fractions[0] * len(label_df))]], ignore_index=True)
+            elif self.type == "val":
                 if idx == 0:
-                    temp_df = label_df.iloc[int(self.train_fraction * len(label_df)):]
+                    temp_df = label_df.iloc[int(self.split_fractions[0] * len(label_df)): int((self.split_fractions[0] + self.split_fractions[1]) * len(label_df))]
                 else:
-                    temp_df = pd.concat([temp_df, label_df.iloc[int(self.train_fraction * len(label_df)):]], ignore_index=True)
+                    temp_df = pd.concat([temp_df, label_df.iloc[int(self.split_fractions[0] * len(label_df)): int((self.split_fractions[0] + self.split_fractions[1]) * len(label_df))]], ignore_index=True)
+            elif self.type == "test":
+                if idx == 0:
+                    temp_df = label_df.iloc[int((self.split_fractions[0] + self.split_fractions[1]) * len(label_df)):]
+                else:
+                    temp_df = pd.concat([temp_df, label_df.iloc[int((self.split_fractions[0] + self.split_fractions[1]) * len(label_df)):]], ignore_index=True)
+            else:
+                raise ValueError(f"Invalid type: {self.type}. Must be 'train', 'val', or 'test'.")
 
         self.df = temp_df.reset_index(drop=True)
 
@@ -146,7 +153,7 @@ def get_dataloader(
     batch_size: int = 32,
     shuffle: bool = True,
     type: str = "train",
-    train_fraction: float = 0.8,
+    split_fractions: Tuple[float, float, float] = (0.70, 0.15, 0.15),
     majority_fraction: float = 0.01,
     seed: int = 10701,
 ):
@@ -157,7 +164,7 @@ def get_dataloader(
         tf_sequences_path=tf_sequences_path,
         gene_sequences_path=gene_sequences_path,
         type=type,
-        train_fraction=train_fraction,
+        split_fractions=split_fractions,
         majority_fraction=majority_fraction,
         shuffle=True,
         seed=seed
