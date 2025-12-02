@@ -30,7 +30,7 @@ class PairPerturbSeqDataset(Dataset):
         type: str = "train",
         shuffle: bool = True,
         train_fraction: float = 0.8,
-        majority_fraction: float = 1.0,
+        majority_fraction: float = 0.01,
         seed: int = 10701,
     ):
         if not os.path.exists(parquet_path):
@@ -147,7 +147,7 @@ def get_dataloader(
     shuffle: bool = True,
     type: str = "train",
     train_fraction: float = 0.8,
-    majority_fraction: float = 1.0,
+    majority_fraction: float = 0.01,
     seed: int = 10701,
 ):
     """Utility that returns a DataLoader for the whole parquet file.

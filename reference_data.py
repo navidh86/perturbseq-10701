@@ -15,11 +15,6 @@ class PerturbSeqDataset(Dataset):
         type: 'train' or 'test' split
         train_fraction: fraction of data to use for training (rest for test)
         seed: random seed for sampling
-        encode_sequence: whether to encode sequence characters to integer
-            tokens. If True, a vocabulary is built from characters present in
-            the sequences and characters are mapped to 2..V; 0 is PAD.
-        max_len: if provided, sequences will be truncated/padded to this
-            maximum length when encoding. Padding happens in the collate fn.
     """
 
     def __init__(
@@ -80,11 +75,8 @@ class PerturbSeqDataset(Dataset):
 
         y = self.labels[idx]
         # convert y to tensor
-        if np.isscalar(y):
-            y_tensor = torch.tensor(y, dtype=torch.float32)
-        else:
-            y_tensor = torch.tensor(y, dtype=torch.float32)
-
+        y_tensor = torch.tensor(y, dtype=torch.float32)
+        
         return x, y_tensor
 
 

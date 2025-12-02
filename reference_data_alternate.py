@@ -118,6 +118,7 @@ def get_dataloader(
     batch_size: int = 32,
     shuffle: bool = True,
     type: str = "train",
+    seed: int = 10701,
 ):
     """Utility that returns a DataLoader for the whole parquet file.
     """
@@ -126,7 +127,8 @@ def get_dataloader(
         tf_sequences_path=tf_sequences_path,
         gene_sequences_path=gene_sequences_path,
         type=type,
-        shuffle=True
+        shuffle=True,
+        seed=seed
     )
 
     loader = DataLoader(
