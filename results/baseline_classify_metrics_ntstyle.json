@@ -1,0 +1,6 @@
+{
+  "test_loss": 0.754861012442033,
+  "accuracy": 0.6594400819392284,
+  "macro_f1": 0.6505167541486904,
+  "classification_report": "              precision    recall  f1-score   support\n\n           0     0.6091    0.5671    0.5874      1654\n           1     0.8252    0.7470    0.7842      2332\n           2     0.5360    0.6319    0.5800      1872\n\n    accuracy                         0.6594      5858\n   macro avg     0.6568    0.6487    0.6505      5858\nweighted avg     0.6718    0.6594    0.6634      5858\n"
+}
